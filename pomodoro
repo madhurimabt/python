@@ -1,0 +1,28 @@
+import time
+
+def pomodoro_timer():
+    try:
+        focus_minutes = int(input("⏳ How many minutes do you want to focus? (Default: 25) ") or 25)
+        rest_minutes = int(input("💤 How many minutes do you want to rest? (Default: 5) ") or 5)
+        while True:
+            print(f"\n🟢 Time to focus! Stay on task for {focus_minutes} minutes.")
+            countdown(focus_minutes)
+
+            print(f"\n⏳ Take a break! Relax for {rest_minutes} minutes.")
+            countdown(rest_minutes)
+
+            cont = input("🔄 Do you want to start another Pomodoro? (yes/no): ").strip().lower()
+            if cont != "yes":
+                print("\n🎉 Great job today! Keep up the good work. See you next time!")
+                break
+
+    except ValueError:
+        print("❌ Oops! Please enter a valid number for the timer.")
+
+def countdown(minutes):
+    for i in range(minutes, 0, -1):
+        print(f" ⏳ {i} minutes left...", end="\r")
+        time.sleep(60)  # Pause for a minute
+    print("⏰ Time's up!                ")
+
+pomodoro_timer()
