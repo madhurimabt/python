@@ -1,0 +1,73 @@
+// from terminal in pycharm need to install fpdf - to generate pdf // 
+pip install fpdf
+// name your file ex: resume builder or resume crafter, etc //
+//create files resume_builder.py & resume_data.json - java script object notation//
+resume_builder.py
+from fpdf import FPDF
+import json
+
+def get_user_details():
+    """Collect user details for the resume."""
+    details = {
+        "name": input("Enter your full name: "),
+        "email": input("Enter your email: "),
+        "phone": input("Enter your phone number: "),
+        "summary": input("Enter a short summary about yourself: "),
+        "skills": input("Enter your skills (comma separated): ").split(","),
+        "experience": input("Enter your work experience (comma separated): ").split(","),
+        "education": input("Enter your education details: ")
+    }
+    return details
+
+def save_to_json(details, filename="resume_data.json"):
+    """Save resume details to a JSON file."""
+    with open(filename, "w") as file:
+        json.dump(details, file, indent=4)
+    print("Data saved successfully!")
+
+def generate_resume(details, filename="resume.pdf"):
+    """Generate a PDF resume."""
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, details["name"], ln=True, align='C')
+    pdf.set_font("Arial", "", 12)
+    pdf.cell(200, 10, f"Email: {details['email']} | Phone: {details['phone']}", ln=True, align='C')
+    pdf.ln(10)
+    
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(200, 10, "Summary", ln=True)
+    pdf.set_font("Arial", "", 12)
+    pdf.multi_cell(0, 10, details["summary"])
+    pdf.ln(5)
+    
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(200, 10, "Skills", ln=True)
+    pdf.set_font("Arial", "", 12)
+    pdf.multi_cell(0, 10, ", ".join(details["skills"]))
+    pdf.ln(5)
+    
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(200, 10, "Experience", ln=True)
+    pdf.set_font("Arial", "", 12)
+    pdf.multi_cell(0, 10, "\n".join(details["experience"]))
+    pdf.ln(5)
+    
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(200, 10, "Education", ln=True)
+    pdf.set_font("Arial", "", 12)
+    pdf.multi_cell(0, 10, details["education"])
+    
+    pdf.output(filename)
+    print(f"Resume saved as {filename}!")
+
+def main():
+    """Main function to run the resume builder."""
+    details = get_user_details()
+    save_to_json(details)
+    generate_resume(details)
+
+if __name__ == "__main__":
+    main()
+// run the code and give the required details after the details are entered a pdf file is generated //
